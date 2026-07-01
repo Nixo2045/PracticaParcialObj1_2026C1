@@ -1,0 +1,77 @@
+import seres.*
+import territorios.*
+
+describe "Test de territorio y seres" {
+
+    // Seres
+    const elfoSilvano1 = new ElfoSilvano()
+    const hobbit1 = new Hobbit()
+    const enanoHerrero1 = new EnanoHerrero()
+    // Territorios
+    const territorio1 = new Territorio()
+    // Situacion Inicial
+    method initialize() {
+        hobbit1.organizarFiesta()
+        territorio1.agregarSer(elfoSilvano1)
+        territorio1.agregarSer(hobbit1)
+        territorio1.agregarSer(enanoHerrero1)
+    }
+
+    test "la habilidad del elfo debe ser 580, la del hobbit 1100, y la del enano 300 respectivamente." {
+        assert.equals(580, elfoSilvano1.habilidad())
+        assert.equals(1100, hobbit1.habilidad())
+        assert.equals(300, enanoHerrero1.habilidad())
+    }
+
+    test "el hobbit debe tener 45 amigos y debe ser inmortal." {
+        assert.equals(45, hobbit1.cantAmigos())
+        assert.that(hobbit1.esInmortal())
+    }
+
+    test "el promedio de habilidad del territorio es 660." {
+        assert.equals(660, territorio1.promedioDeHabilidadTotal())
+    }
+
+    test "el valor máximo de habilidad entre todos los seres inmortales debe ser 1100." {
+        assert.equals(1100, territorio1.valorMaximoDeHabilidadDeSeres())
+    }
+
+    test "los seres torpes del territorio son el elfo y el enano." {
+        assert.equals([elfoSilvano1, enanoHerrero1], territorio1.seresTorpes())
+    }
+
+    test "existe un ser mortal en el territorio." {
+        assert.that(territorio1.hayAlgunMortal())
+    }
+    test "Hubo un torneo por lo que elfo sabe 40 canciones, hobbit ahora tiene 53 amigos y la ira del enano subio a 500" {
+        territorio1.huboUnTorneo()
+        assert.equals(40, elfoSilvano1.cantCancionesQueSabe())
+        assert.equals(53, hobbit1.cantAmigos())
+        assert.equals(500, enanoHerrero1.ira())
+    }
+
+    test "La habilidad del elfo sigue siendo 580, la del hobbit sigue siendo 1100, la del enano pasa a 1400. Por lo tanto, el único ser torpe es ahora el elfo." {
+        territorio1.huboUnTorneo()
+        assert.equals(580, elfoSilvano1.habilidad())
+        assert.equals(1100, hobbit1.habilidad())
+        assert.equals(1400, enanoHerrero1.habilidad())
+        assert.equals([elfoSilvano1], territorio1.seresTorpes())
+    }
+
+    test "Hubo una epifania en el torneo" {
+        territorio1.huboUnTorneo()
+        territorio1.huboUnaEpifania()
+        assert.equals(80, elfoSilvano1.cantCancionesQueSabe())
+        assert.equals(640, elfoSilvano1.habilidad())
+        assert.equals(53, hobbit1.cantAmigos())
+        assert.equals(500, enanoHerrero1.ira())        
+    }
+
+    test "Test de los agregados sobre Territorio:" {
+        territorio1.consumoDeRecursos()
+        
+        assert.equals(10 - 3, territorio1.cantLembas())
+        assert.equals(10 - 4, territorio1.cantTabacos())
+    }
+
+}
